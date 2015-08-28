@@ -4,10 +4,12 @@ using System.Collections;
 public class CenterOfPosition : MonoBehaviour
 {
     public int ruler = 1;
+    public float dampening = 5f;
     // Use this for initialization
     void Start()
     {
-    
+        Camera camera = GetComponentInChildren<Camera>();
+        camera.tag = "Camera" + ruler;
     }
     
     // Update is called once per frame
@@ -21,7 +23,6 @@ public class CenterOfPosition : MonoBehaviour
         }
         centroid /= units.Length;
 
-        transform.position = new Vector3(centroid.x, 0, centroid.z);
-        print(units.Length);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(centroid.x, 0, centroid.z),Time.deltaTime * dampening);
     }
 }

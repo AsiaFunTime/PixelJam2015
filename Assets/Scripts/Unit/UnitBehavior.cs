@@ -3,7 +3,7 @@ using System.Collections;
 
 abstract public class UnitBehavior : MonoBehaviour {
 	//base properties
-	public float _rotateSpeed = 30f;
+	public float _rotateSpeed = 2f;
     public float _acceleration = 5f;
     public float _deceleration = 5f;
     public float _maxSpeed = 8f;
