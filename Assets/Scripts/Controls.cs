@@ -107,7 +107,6 @@ public class Controls : MonoBehaviour
 
     bool isCloseEnoughToKing(){
         float distance = Vector3.Distance (transform.position, unit.MyKing.transform.position);
-        print(distance);
         return distance <= minDistanceToKing;
     }
 

@@ -49,7 +49,7 @@ public class CenterOfPosition : MonoBehaviour
 
     bool canBeSeen(GameObject unit){        
         Vector3 screenPoint = cam.WorldToViewportPoint(unit.transform.position);
-        return (screenPoint.z > 0 && screenPoint.x > 0.2 && screenPoint.x < 0.8 && screenPoint.y > 0 && screenPoint.y < 1);
+        return (screenPoint.z > 0 && screenPoint.x > 0.2 && screenPoint.x < 0.8 && screenPoint.y > 0.2 && screenPoint.y < 0.8);
     }
 
     void zoomOut(){

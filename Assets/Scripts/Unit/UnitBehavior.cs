@@ -2,7 +2,8 @@
 using System.Collections;
 
 abstract public class UnitBehavior : MonoBehaviour {
-	//base properties
+    //base properties
+    private float _initialMaxSpeed;
 	public float _rotateSpeed = 2f;
     public float _acceleration = 5f;
     public float _deceleration = 5f;
@@ -90,7 +91,18 @@ abstract public class UnitBehavior : MonoBehaviour {
             _king = value;
         }
     }
-	
+    
+    public float InitialMaxSpeed
+    {
+        get
+        {
+            return _initialMaxSpeed;
+        }
+        set
+        {
+            _initialMaxSpeed = value;
+        }
+    }
 	public virtual void Die(){
 		Destroy (this.gameObject);
 	}	
@@ -106,8 +118,15 @@ abstract public class UnitBehavior : MonoBehaviour {
 
         gameObject.AddComponent<Controls>();
 
-        BoxCollider bc = gameObject.AddComponent<BoxCollider>();
+        CapsuleCollider bc = gameObject.AddComponent<CapsuleCollider>();
         bc.isTrigger = true;
+
+        if (!(this is King))
+        {
+            gameObject.tag = "UnitNeutral";
+        }
+
+        InitialMaxSpeed = MaxSpeed;
     }
 
 	/// <summary>
@@ -125,7 +144,12 @@ abstract public class UnitBehavior : MonoBehaviour {
     public void OnTriggerEnter(Collider other) {
         if (other.tag == "UnitNeutral")
         {
+            print(other.name + " " + gameObject.name);
             other.GetComponent<UnitBehavior>().Recruit(Ruler);
+        } else if (other.tag != "Unit" + Ruler)
+        {
+            // damage
+
         }
     }
 }
