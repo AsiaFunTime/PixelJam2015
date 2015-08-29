@@ -21,7 +21,7 @@ public class Controls : MonoBehaviour
         {
             transform.name = "King" + unit.Ruler;
         }
-        minDistanceToKing = Random.Range(2, 5);
+        minDistanceToKing = Random.Range(2, 10);
     }
     
     // Update is called once per frame
@@ -37,12 +37,20 @@ public class Controls : MonoBehaviour
         if (isMovedByPlayer())
         {      
             autoSpeed=0f; 
+            float decelerationRate = Time.deltaTime * unit.Deceleration;
             if (vIsMovedByPlayer())
             {                
                 vDirection = Vector3.back;
                 // Vertical Speed
                 vCurrentSpeed = vCurrentSpeed + (Time.deltaTime * unit.Acceleration * v);
                 vCurrentSpeed = Mathf.Clamp(vCurrentSpeed, -unit.MaxSpeed, unit.MaxSpeed);
+
+                if(v>0.1){
+                    vCurrentSpeed = Mathf.Clamp(vCurrentSpeed, 0, vCurrentSpeed);
+                }
+                else if(v<-0.1){
+                    vCurrentSpeed = Mathf.Clamp(vCurrentSpeed, vCurrentSpeed, 0);
+                }
             }
             if(hIsMovedByPlayer())
             {
@@ -50,6 +58,14 @@ public class Controls : MonoBehaviour
                 hDirection = Vector3.right;
                 // Horizontal Speed
                 hCurrentSpeed = hCurrentSpeed + (Time.deltaTime * unit.Acceleration * h);
+
+                if(h>0.1){
+                    hCurrentSpeed = Mathf.Clamp(hCurrentSpeed, 0, hCurrentSpeed);
+                }
+                else if(h<-0.1){
+                    hCurrentSpeed = Mathf.Clamp(hCurrentSpeed, hCurrentSpeed, 0);
+                }
+
                 hCurrentSpeed = Mathf.Clamp(hCurrentSpeed, -unit.MaxSpeed, unit.MaxSpeed);
             }
             // Rotate
@@ -94,9 +110,11 @@ public class Controls : MonoBehaviour
                 autoSpeed = Mathf.Clamp(autoSpeed, -unit.MaxSpeed, unit.MaxSpeed);
                 transform.position = Vector3.MoveTowards(transform.position, unit.MyKing.transform.position, autoSpeed * Time.deltaTime);
 
-                // Look at king
-                Quaternion targetRotation = Quaternion.LookRotation(unit.MyKing.transform.position - transform.position);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, unit.RotateSpeed * Time.deltaTime);
+                // Look at king if knight
+                if(unit is Knight){
+                    Quaternion targetRotation = Quaternion.LookRotation(unit.MyKing.transform.position - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, unit.RotateSpeed * Time.deltaTime);
+                }
             }
             else{
                 // decelerate
