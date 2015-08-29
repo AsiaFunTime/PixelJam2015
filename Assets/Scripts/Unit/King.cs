@@ -3,27 +3,48 @@ using System.Collections;
 
 public class King : UnitBehavior {
     
-    public float RunAwayRange = 12f;
-    float angle = 30f;
+    public float DetectBehindRange = 12f;
+    public float DetectInfrontRange = 24f;
+    float angle = 180f;
+
+    private bool yellCharge = true;
     void Update()
     {
         if (Ruler == 0)
             return;
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, RunAwayRange);
+        enemyBehind = false;
+        enemyInfront = false;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, DetectInfrontRange);
         foreach (Collider collider in hitColliders)
         {
             if(isEnemy(collider)) // Enemy
             {                
-                // Check if this knight is facing the enemy
-                if  ( Vector3.Angle(-transform.forward, collider.transform.position - transform.position) < angle) {
+                // Check if this unit is running away enemy
+                if  ( Vector3.Angle(-transform.forward, collider.transform.position - transform.position) < angle && !enemyBehind) {
                     //print("RUNAWAY FROM " + collider.name);
+                    enemyBehind = true;
+                    
                     RunAway();
-                    break;
+                }
+                if  ( Vector3.Angle(transform.forward, collider.transform.position - transform.position) < angle && !enemyInfront) {
+                    //print("RUNAWAY FROM " + collider.name);
+                    enemyInfront = true;
+                    if(yellCharge)
+                    {                        
+                        yellCharge=false;
+                        audio.Play("charge");
+                    }
                 }
             }
+        }
+        if (!enemyBehind)
+        {
             Normal();
         }
-        
+        if (!enemyInfront)
+        {
+            yellCharge = true;
+        }
     }
     
     public void RunAway()

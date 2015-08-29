@@ -19,8 +19,15 @@ public class AudioManagerScript : MonoBehaviour {
 
 	public GameObject gameManager;
 
+
+    AudioSource[] sources = new AudioSource[32];
 	// Use this for initialization
 	void Start () { 
+        // Initialize audio sources
+        for (int i = 0; i < 32; i++)
+        {
+            sources[i] = gameObject.AddComponent<AudioSource>();
+        }
 
 		// Attack - Grunt - Die - cheer
 		grunts = new AudioClip[6];
@@ -88,8 +95,19 @@ public class AudioManagerScript : MonoBehaviour {
 	{
 		// Types of audio
 		// Attack - Grunt - Die
-		AudioSource audioSource = gameManager.AddComponent<AudioSource>();
-
+        AudioSource audioSource = null;
+        foreach (AudioSource source in sources)
+        {
+            if(!source.isPlaying){
+                audioSource = source;
+                break;
+            }
+        }
+        if (audioSource == null)
+        {
+            print("Exceeded audio limit!");
+            return;
+        }
 		if ( clipName == "attack" )
 		{
 			int i = Random.Range( 0, 5 );
@@ -124,9 +142,34 @@ public class AudioManagerScript : MonoBehaviour {
 		{
 			audioSource.volume = 0.5f;
 			audioSource.clip = horseGallop ;
-		}
+        }
+        else if ( clipName == "charge" )
+        {
+            //audioSource.volume = 0.5f;
+            //audioSource.clip = horseGallop ;
+        }
+        else if ( clipName == "recruitKnight" )
+        {
+            //audioSource.volume = 0.5f;
+            //audioSource.clip = horseGallop ;
+        }
+        else if ( clipName == "recruitFootman" )
+        {
+            //audioSource.volume = 0.5f;
+            //audioSource.clip = horseGallop ;
+        }
+        else if ( clipName == "recruitArcher" )
+        {
+            //audioSource.volume = 0.5f;
+            //audioSource.clip = horseGallop ;
+        }
+        else if ( clipName == "recruitPeasant" )
+        {
+            //audioSource.volume = 0.5f;
+            //audioSource.clip = horseGallop ;
+        }
 		audioSource.Play();
-		StartCoroutine(WaitThenDestroy(audioSource.clip.length, audioSource));
+		//StartCoroutine(WaitThenDestroy(audioSource.clip.length, audioSource));
 	
 	}
 
