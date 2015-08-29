@@ -4,13 +4,18 @@ using System.Collections.Generic;
 public class CenterOfPosition : MonoBehaviour
 {
     public int ruler = 1;
-    public float dampening = 5f;
+    private float dampening = 3f;
     private Camera cam;
     private SmoothFollow smoothFollow;
-    public float zoomOutSpeed = 17f;
+    private float zoomOutSpeed = 12f;
 
-    public float zoomInSpeed = 10f;
-    public float minHeight = 8f;
+    private float zoomInSpeed = 10f;
+    private float minHeight = 24f;
+
+    private float recalculateFrequency = 0.5f;
+
+    private float totalTime = 0f;
+
     // Use this for initialization
     void Start()
     {
@@ -19,29 +24,35 @@ public class CenterOfPosition : MonoBehaviour
         smoothFollow = cam.GetComponent<SmoothFollow>();
         smoothFollow.height = minHeight;
     }
-    
+    Vector3 centroid ;
     // Update is called once per frame
     void Update()
     {
-        Vector3 centroid = new Vector3(0, 0, 0);
-        GameObject[] units = GameObject.FindGameObjectsWithTag("Unit" + ruler);
-        bool zoomedOut = false;
-        foreach (GameObject unit in units)
+        totalTime += Time.deltaTime;
+
+        if (totalTime >= recalculateFrequency)
         {
-            if(!canBeSeen(unit)){
-                // Zoom out
-                zoomedOut = true;
-                zoomOut();
-            }
 
-            if(!zoomedOut){
-                // zoom in
-                zoomIn();
+            centroid = new Vector3(0, 0, 0);
+            GameObject[] units = GameObject.FindGameObjectsWithTag("Unit" + ruler);
+            bool zoomedOut = false;
+            foreach (GameObject unit in units)
+            {
+                if(!canBeSeen(unit)){
+                    // Zoom out
+                    zoomedOut = true;
+                    zoomOut();
+                }
+
+                if(!zoomedOut){
+                    // zoom in
+                    zoomIn();
+                }
+                centroid += unit.transform.position;
             }
-            centroid += unit.transform.position;
+            centroid /= units.Length;
+            totalTime = 0f;
         }
-        centroid /= units.Length;
-
         transform.position = Vector3.Lerp(transform.position, new Vector3(centroid.x, 0, centroid.z),Time.deltaTime * dampening);
 
         

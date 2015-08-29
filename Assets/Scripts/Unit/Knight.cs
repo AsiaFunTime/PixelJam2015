@@ -3,35 +3,30 @@ using System.Collections;
 
 public class Knight : UnitBehavior
 {
-    public float ChargeRange = 25f;
-    float angle = 10f;
+    float angle = 20f;
     void Update()
     {
         if (Ruler == 0)
             return;
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, ChargeRange);
-        foreach (Collider collider in hitColliders)
+
+        if (MyKing.GetComponent<UnitBehavior>().enemiesInfront())
         {
-            if(isEnemy(collider)) // Enemy
-            {                
-                // Check if this knight is facing the enemy
-                if  ( Vector3.Angle(transform.forward, collider.transform.position - transform.position) < angle) {
-                    Charge();
-                    break;
-                }
-            }
+            Charge();
+        } else
+        {
             StopCharge();
         }
-
     }
 
     public void Charge()
     {
-        MaxSpeed = InitialMaxSpeed * 1.4f;
+        MaxSpeed = InitialMaxSpeed * 1.75f;
+        Acceleration = InitialAcceleration * 2.2f;
     }
 
     public void StopCharge()
     {
+        Acceleration = InitialAcceleration;
         MaxSpeed = InitialMaxSpeed;
     }
 }
