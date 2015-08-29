@@ -11,7 +11,7 @@ abstract public class UnitBehavior : MonoBehaviour {
 	public float _health;
 	public int _ruler = 0;
 	public GameObject _unitPrefab;
-    
+    public GameObject _king;
     public float Acceleration { 
         get {
             return _acceleration;
@@ -81,6 +81,15 @@ abstract public class UnitBehavior : MonoBehaviour {
 			return _unitPrefab;
 		}
 	}
+
+    public GameObject MyKing{
+        get{
+            return _king;
+        }
+        set{
+            _king = value;
+        }
+    }
 	
 	public virtual void Die(){
 		Destroy (this.gameObject);
@@ -90,6 +99,17 @@ abstract public class UnitBehavior : MonoBehaviour {
 		GameObject.Instantiate (Prefab, new Vector3 (x, 0, z), new Quaternion ());
 	}
 	
+    void Start(){
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.useGravity = false;
+
+        gameObject.AddComponent<Controls>();
+
+        BoxCollider bc = gameObject.AddComponent<BoxCollider>();
+        bc.isTrigger = true;
+    }
+
 	/// <summary>
 	/// Player recruit this unit.
 	/// </summary>
@@ -97,6 +117,7 @@ abstract public class UnitBehavior : MonoBehaviour {
 		if(Ruler == 0){
 			Ruler = playerNumber;
 			gameObject.tag = "Unit"+playerNumber;
+            _king = GameObject.Find("King"+playerNumber);
 			return true;
 		}
 		return false;
