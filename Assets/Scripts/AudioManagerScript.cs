@@ -34,11 +34,11 @@ public class AudioManagerScript : MonoBehaviour {
 		gameManager = GameObject.FindGameObjectWithTag("GameManager");
 
 		grunts[0] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
-		grunts[1] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
-		grunts[2] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
-		grunts[3] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
-		grunts[4] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
-		grunts[5] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
+		grunts[1] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_02") as AudioClip;
+		grunts[2] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_03") as AudioClip;
+		grunts[3] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_04") as AudioClip;
+		grunts[4] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_05") as AudioClip;
+		grunts[5] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_06") as AudioClip;
 
 		attacks[0] = Resources.Load ("Audio/SoundEffects/Metal/blunt_high_high_03") as AudioClip;
 		attacks[1] = Resources.Load ("Audio/SoundEffects/Metal/Sword_clash_01") as AudioClip;
@@ -60,7 +60,7 @@ public class AudioManagerScript : MonoBehaviour {
 
 		// Arrow
 		arrowShoot[0] = Resources.Load ("Audio/SoundEffects/Metal/bow_shoot_01") as AudioClip;
-		arrowShoot[1] = Resources.Load ("Audio/SoundEffects/Metal/bow_shoot_02") as AudioClip;
+		arrowShoot[1] = Resources.Load ("Audio/SoundEffects/Metal/bow_shoot_09") as AudioClip;
 		arrowShoot[2] = Resources.Load ("Audio/SoundEffects/Metal/bow_shoot_03") as AudioClip;
 		arrowShoot[3] = Resources.Load ("Audio/SoundEffects/Metal/bow_shoot_04") as AudioClip;
 		arrowShoot[4] = Resources.Load ("Audio/SoundEffects/Metal/bow_shoot_05") as AudioClip;
