@@ -12,11 +12,11 @@ public class King : UnitBehavior {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, RunAwayRange);
         foreach (Collider collider in hitColliders)
         {
-            if(collider.tag != "Unit"+Ruler && collider.tag != "Ground" && collider.tag != "UnitNeutral") // Enemy
+            if(isEnemy(collider)) // Enemy
             {                
                 // Check if this knight is facing the enemy
                 if  ( Vector3.Angle(-transform.forward, collider.transform.position - transform.position) < angle) {
-                    print("RUNAWAY FROM " + collider.name);
+                    //print("RUNAWAY FROM " + collider.name);
                     RunAway();
                     break;
                 }

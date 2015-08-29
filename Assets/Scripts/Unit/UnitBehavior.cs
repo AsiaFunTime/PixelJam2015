@@ -118,9 +118,6 @@ abstract public class UnitBehavior : MonoBehaviour {
 
         gameObject.AddComponent<Controls>();
 
-        CapsuleCollider bc = gameObject.AddComponent<CapsuleCollider>();
-        bc.isTrigger = true;
-
         if (!(this is King))
         {
             gameObject.tag = "UnitNeutral";
@@ -146,10 +143,16 @@ abstract public class UnitBehavior : MonoBehaviour {
         {
             print(other.name + " " + gameObject.name);
             other.GetComponent<UnitBehavior>().Recruit(Ruler);
-        } else if (other.tag != "Unit" + Ruler)
+        } else if (isEnemy(other) && Damage > 0)
         {
+            print(gameObject.name + " hits " + other.name + " for " + Damage + " damage");
             // damage
-
+            other.GetComponent<UnitBehavior>().Health -= Damage;
         }
+    }
+
+    public bool isEnemy(Collider other){
+        //return other.tag.Contains("Unit");
+        return false;
     }
 }

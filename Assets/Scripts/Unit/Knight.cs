@@ -12,7 +12,7 @@ public class Knight : UnitBehavior
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, ChargeRange);
         foreach (Collider collider in hitColliders)
         {
-            if(collider.tag != "Unit"+Ruler && collider.tag != "UnitNeutral"&& collider.tag != "Ground") // Enemy
+            if(isEnemy(collider)) // Enemy
             {                
                 // Check if this knight is facing the enemy
                 if  ( Vector3.Angle(transform.forward, collider.transform.position - transform.position) < angle) {
