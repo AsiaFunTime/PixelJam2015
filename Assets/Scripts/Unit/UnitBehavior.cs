@@ -2,6 +2,10 @@
 using System.Collections;
 
 abstract public class UnitBehavior : MonoBehaviour {
+    private static float BASE_ACCELERATION = 0.5f;
+    private static float BASE_MAXSPEED = 0.5f;
+    private static float BASE_DECELERATION = 0.5f;
+
     //base properties
     private float _initialMaxSpeed;
     private float _initialAcceleration;
@@ -18,17 +22,23 @@ abstract public class UnitBehavior : MonoBehaviour {
     public float EnvironmentSpeedModifier = 1f;
     public float EnvironmentAttackModifier = 1f;
 
+    public float ShouldButtonSpeedModifier = 1f;
+
     public AudioManagerScript audio;
     // The player who killed this unit
     public int Killer = 0;
     private Animator _animator;
-
+    
     public GameObject particleExplode;
+    public GameObject particleHurt;
 
     public bool enemyInfront = false;
     public bool enemyBehind = false;
+
+    public MapManager mapManager;
     
     void Start(){
+        mapManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<MapManager>();
         audio = GameObject.FindGameObjectWithTag("GameManager").GetComponent<AudioManagerScript>();
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();
         rb.isKinematic = true;
@@ -54,7 +64,7 @@ abstract public class UnitBehavior : MonoBehaviour {
 
     public float Acceleration { 
         get {
-            return _acceleration;
+            return _acceleration + BASE_ACCELERATION;
         }
         set{
             _acceleration = value;
@@ -62,7 +72,7 @@ abstract public class UnitBehavior : MonoBehaviour {
     }
     public float Deceleration { 
         get {
-            return _deceleration;
+            return _deceleration + BASE_DECELERATION;
         }
         set{
             _deceleration = value;
@@ -70,7 +80,7 @@ abstract public class UnitBehavior : MonoBehaviour {
     }
     public float MaxSpeed { 
         get {
-            return _maxSpeed * EnvironmentSpeedModifier;
+            return (_maxSpeed + BASE_MAXSPEED) * EnvironmentSpeedModifier * ShouldButtonSpeedModifier;
         }
         set{
             _maxSpeed = value;
@@ -150,15 +160,19 @@ abstract public class UnitBehavior : MonoBehaviour {
             _initialAcceleration = value;
         }
     }
-	public virtual void Die(){
+    public virtual void Die(){
+        //dead
+        audio.Play("die");
         Vector3 spawnPos = transform.position;
         spawnPos.y = 2f;
         GameObject.Instantiate(particleExplode, spawnPos , Random.rotation);
         if (this is King)
         {            
+            mapManager.KillKing(Ruler);
             print(Ruler + " DIED");
             Destroy(GameObject.Find("P"+Ruler));
-            audio.Play("cheer");
+            if(Killer > 0)
+                audio.Play("cheer");
             // convert all controlled units to the killer
             GameObject[] myUnits = GameObject.FindGameObjectsWithTag("Unit"+Ruler);
             foreach(GameObject unit in myUnits){
@@ -177,12 +191,15 @@ abstract public class UnitBehavior : MonoBehaviour {
         Health -= damage;
         if (Health <= 0)
         {            
-            //dead
-            audio.Play("die");
             Killer = attacker;
             Die();
         } else
         {            
+            if(this is King){
+                Vector3 spawnPos = transform.position;
+                spawnPos.y = 2f;
+                GameObject.Instantiate(particleHurt, spawnPos , Random.rotation);
+            }
             audio.Play("grunt");
         }
     }
@@ -193,7 +210,12 @@ abstract public class UnitBehavior : MonoBehaviour {
 	public virtual bool Recruit(int playerNumber, bool kingKilled = false){
 		if(Ruler == 0 && playerNumber != 0 || kingKilled){
 			Ruler = playerNumber;
-			gameObject.tag = "Unit"+playerNumber;
+            if(playerNumber == 0){
+                gameObject.tag = "UnitNeutral";
+            }
+            else {
+                gameObject.tag = "Unit"+playerNumber;
+            }
             _king = GameObject.Find("King"+playerNumber);
             _animator.SetBool("bobbing", true);
 
@@ -210,21 +232,27 @@ abstract public class UnitBehavior : MonoBehaviour {
                     rend.material.SetColor("_OutlineColor", KingColors.ColorKingOrange);
                 else if(playerNumber ==4)
                     rend.material.SetColor("_OutlineColor", KingColors.ColorKingCyan);
+                else{
+                    rend.material.SetColor("_OutlineColor", KingColors.ColorNeutral);
+                }
             }
 
             if(!kingKilled){
-                // play rcruit sound
-                if(this is Knight){
-                    audio.Play("recruitKnight");
-                }
-                else if(this is Footman){                    
-                    audio.Play("recruitFootman");
-                }
-                else if(this is Archer){                    
-                    audio.Play("recruitArcher");
-                }
-                else if(this is Peasant){                    
-                    audio.Play("recruitPeasant");
+                int i = Random.Range( 0, 9 );
+                if(i == 7 ){
+                    // play rcruit sound
+                    if(this is Knight){
+                        audio.Play("recruitKnight");
+                    }
+                    else if(this is Footman){                    
+                        audio.Play("recruitFootman");
+                    }
+                    else if(this is Archer){                    
+                        audio.Play("recruitArcher");
+                    }
+                    else if(this is Peasant){                    
+                        audio.Play("recruitPeasant");
+                    }
                 }
             }
 
@@ -251,12 +279,18 @@ abstract public class UnitBehavior : MonoBehaviour {
             Environment env = other.GetComponent<Environment>();
             EnvironmentSpeedModifier = env.SpeedModifier;
             EnvironmentAttackModifier = env.AttackModifier;
+            print("Hit environment");
 
-            if(this is Knight){
-                if(other.name.Contains("Trees")){
+            if (this is Knight)
+            {
+                if (other.name.Contains("Trees"))
+                {
                     Damage = 0;
                 }
             }
+        } else if (other.tag == "Drown")
+        {
+            Die();
         }
     }
 
@@ -266,7 +300,7 @@ abstract public class UnitBehavior : MonoBehaviour {
             Environment env = other.GetComponent<Environment>();
             EnvironmentSpeedModifier = 1f;
             EnvironmentAttackModifier = 1f;
-
+            print("Leaving environment");
             
             if(this is Knight){
                 if(other.name.Contains("Trees")){

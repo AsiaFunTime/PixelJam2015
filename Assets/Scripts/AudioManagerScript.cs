@@ -20,11 +20,10 @@ public class AudioManagerScript : MonoBehaviour {
 	// Arrow
 	AudioClip[] arrowShoot = new AudioClip[6];
 	AudioClip[] arrowCollide = new AudioClip[6];
-
-	AudioClip horseGallop = new AudioClip();
-	AudioSource horseGallopSource =new  AudioSource();
-	AudioClip musicBackground = new AudioClip();
-	AudioSource musicBackgroundSource = new AudioSource();
+    
+    AudioClip horseGallop = new AudioClip();
+    AudioSource horseGallopSource =new  AudioSource();
+    AudioClip bugleClip = new AudioClip();
 
 	public GameObject gameManager;
 
@@ -51,7 +50,7 @@ public class AudioManagerScript : MonoBehaviour {
 
 		recruitKnights = new AudioClip[6];
 		recruitFootmans = new AudioClip[6];
-		recruitArchers = new AudioClip[2];
+		recruitArchers = new AudioClip[6];
 		recruitPeasants = new AudioClip[3];
 
 		gameManager = GameObject.FindGameObjectWithTag("GameManager");
@@ -62,13 +61,6 @@ public class AudioManagerScript : MonoBehaviour {
 		horseGallopSource.clip = horseGallop;
 		horseGallopSource.volume = 0.5f;
 		horseGallopSource.Play ();
-
-		//Music
-		musicBackground = Resources.Load ("Audio/SoundEffects/Music/wc2_human_01") as AudioClip;
-		musicBackgroundSource = gameObject.AddComponent<AudioSource>();
-		musicBackgroundSource.clip = musicBackground;
-		musicBackgroundSource.volume = 0.5f;
-		musicBackgroundSource.Play ();
 
 		grunts[0] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
 		grunts[1] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_02") as AudioClip;
@@ -134,9 +126,13 @@ public class AudioManagerScript : MonoBehaviour {
 		recruitPeasants[1] = Resources.Load ("Audio/SoundEffects/WC2/Peasant/Psready") as AudioClip;
 		recruitPeasants[2] = Resources.Load ("Audio/SoundEffects/WC2/Peasant/Psyessr4") as AudioClip;
 
-		//Archer
-		recruitArchers[0] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnwhat3") as AudioClip;
-		recruitArchers[1] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnyessr1") as AudioClip;
+        //Archer
+        recruitArchers[0] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnpisd1") as AudioClip;
+        recruitArchers[1] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnpisd3") as AudioClip;
+        recruitArchers[2] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnwhat1") as AudioClip;
+        recruitArchers[3] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnwhat2") as AudioClip;
+        recruitArchers[4] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnwhat3") as AudioClip;
+        recruitArchers[5] = Resources.Load ("Audio/SoundEffects/WC2/archer/Dnyessr1") as AudioClip;
 
 		//Footman
 		recruitFootmans[0] = Resources.Load ("Audio/SoundEffects/WC2/footman/Hready") as AudioClip;
@@ -147,13 +143,14 @@ public class AudioManagerScript : MonoBehaviour {
 		recruitFootmans[5] = Resources.Load ("Audio/SoundEffects/WC2/footman/Hyessir2") as AudioClip;
 
 		//Knight
-		recruitKnights[0] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Hready") as AudioClip;
-		recruitKnights[1] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Hwhat1") as AudioClip;
-		recruitKnights[2] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Hwhat3") as AudioClip;
-		recruitKnights[3] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Hwhat5") as AudioClip;
-		recruitKnights[4] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Hwhat6") as AudioClip;
-		recruitKnights[5] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Hyessir2") as AudioClip;
-
+		recruitKnights[0] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Pkready") as AudioClip;
+		recruitKnights[1] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Pkyessr3") as AudioClip;
+		recruitKnights[2] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Tuwhat1") as AudioClip;
+		recruitKnights[3] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Tuwhat2") as AudioClip;
+		recruitKnights[4] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Tuwhat3") as AudioClip;
+		recruitKnights[5] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Tuyessr1") as AudioClip;
+        
+        bugleClip = Resources.Load ("Audio/SoundEffects/Menu/bugle") as AudioClip;
 	}
 	
 	// Update is called once per frame
@@ -179,77 +176,68 @@ public class AudioManagerScript : MonoBehaviour {
             print("Exceeded audio limit!");
             return;
         }
-		if ( clipName == "attack" )
-		{
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = attacks[i] ;
-		}
-		else if ( clipName == "die" )
-		{
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = dies[i] ;
-		}
-		else if ( clipName == "grunt" )
-		{
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = grunts[i] ;
-		} else if ( clipName == "cheer" )
-		{
-			int i = Random.Range( 0, 2 );
-			audioSource.clip = cheers[i] ;
-		}
-		else if ( clipName == "arrowShoot" )
-		{
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = arrowShoot[i] ;
-		}
-		else if ( clipName == "arrowCollide" )
-		{
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = arrowCollide[i] ;
-		}
-
-		else if ( clipName == "horseGallop" )
-		{
-			audioSource.volume = 0.5f;
-			audioSource.clip = horseGallop ;
-        }
-        else if ( clipName == "charge" )
+        audioSource.volume=1f;
+        if (clipName == "attack")
         {
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = charges[i] ;
-		}
-		else if ( clipName == "recruitKnight" )
+            int i = Random.Range(0, 5);
+            audioSource.clip = attacks [i];
+        } else if (clipName == "die")
         {
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = recruitKnights[i] ;
-		}
-		else if ( clipName == "recruitFootman" )
+            int i = Random.Range(0, 5);
+            audioSource.clip = dies [i];
+        } else if (clipName == "grunt")
         {
-			int i = Random.Range( 0, 5 );
-			audioSource.clip = recruitFootmans[i] ;
-		}
-		else if ( clipName == "recruitArcher" )
+            int i = Random.Range(0, 5);
+            audioSource.clip = grunts [i];
+        } else if (clipName == "cheer")
         {
-			int i = Random.Range( 0, 2 );
-			audioSource.clip = recruitArchers[i] ;
-		}
-		else if ( clipName == "recruitPeasant" )
+            int i = Random.Range(0, 2);
+            audioSource.clip = cheers [i];
+        } else if (clipName == "arrowShoot")
         {
-<<<<<<< HEAD
-            //audioSource.volume = 0.5f;
-            //audioSource.clip = horseGallop ;
+            int i = Random.Range(0, 5);
+            audioSource.clip = arrowShoot [i];
+        } else if (clipName == "arrowCollide")
+        {
+            int i = Random.Range(0, 5);
+            audioSource.clip = arrowCollide [i];
+        } else if (clipName == "horseGallop")
+        {
+            audioSource.volume = 0.5f;
+            audioSource.clip = horseGallop;
+        } else if (clipName == "charge")
+        {
+            int i = Random.Range(0, 5);
+            audioSource.clip = charges [i];
+        } else if (clipName == "recruitKnight")
+        {
+            int i = Random.Range(0, 5);
+            audioSource.clip = recruitKnights [i];
+            audioSource.volume = 0.5f;
+        } else if (clipName == "recruitFootman")
+        {
+            int i = Random.Range(0, 5);
+            audioSource.clip = recruitFootmans [i];
+            audioSource.volume = 0.5f;
+        } else if (clipName == "recruitArcher")
+        {
+            int i = Random.Range(0, 5);
+            audioSource.clip = recruitArchers [i];
+            audioSource.volume = 0.5f;
+        } else if (clipName == "recruitPeasant")
+        {
+            int i = Random.Range(0, 2);
+            audioSource.clip = recruitPeasants [i];
+            audioSource.volume = 0.5f;
+        } else if (clipName == "bugle")
+        {
+            audioSource.clip = bugleClip;
+            audioSource.volume = 0.4f;
         }
         if (audioSource.clip != null)
         {
             audioSource.Play();
         }
-=======
-			int i = Random.Range( 0, 3 );
-			audioSource.clip = recruitPeasants[i] ;
-		}
-		audioSource.Play();
->>>>>>> origin/master
 		//StartCoroutine(WaitThenDestroy(audioSource.clip.length, audioSource));
 	
 	}

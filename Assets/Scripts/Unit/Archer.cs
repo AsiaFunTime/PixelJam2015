@@ -5,7 +5,7 @@ public class Archer : UnitBehavior {
     
     private float ShootRange = 20f;
     float angle = 20f;
-    private float ShootFrequency = 4f;
+    private float ShootFrequency = 2f;
     private bool CanShoot = true;
     public GameObject Arrow;
 

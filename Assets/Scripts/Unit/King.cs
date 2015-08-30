@@ -45,6 +45,18 @@ public class King : UnitBehavior {
         {
             yellCharge = true;
         }
+
+        if (Input.GetButtonDown("SB" + Ruler))
+        {
+            audio.Play("bugle");
+            print("Slowing DOWN");
+            ShouldButtonSpeedModifier = 0.5f;
+        }
+        else
+        {
+            print("SPEEDING UP");
+            ShouldButtonSpeedModifier = 1f;
+        }
     }
     
     public void RunAway()
