@@ -100,6 +100,7 @@ public class AudioManagerScript : MonoBehaviour {
         {
             if(!source.isPlaying){
                 audioSource = source;
+                audioSource.clip = null;
                 break;
             }
         }
@@ -168,7 +169,10 @@ public class AudioManagerScript : MonoBehaviour {
             //audioSource.volume = 0.5f;
             //audioSource.clip = horseGallop ;
         }
-		audioSource.Play();
+        if (audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
 		//StartCoroutine(WaitThenDestroy(audioSource.clip.length, audioSource));
 	
 	}

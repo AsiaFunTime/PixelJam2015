@@ -15,7 +15,7 @@ public class Archer : UnitBehavior {
     {
         if (Ruler == 0 || !CanShoot)
             return;
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, ShootRange);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, ShootRange * EnvironmentAttackModifier);
 
         foreach (Collider collider in hitColliders)
         {
@@ -43,9 +43,10 @@ public class Archer : UnitBehavior {
         Arrow arrowComp = arrow.GetComponent<Arrow>();
         arrowComp.Ruler = Ruler;
         arrowComp.Target = target;
-        arrowComp.ArrowSpeed = ArrowSpeed;
+        arrowComp.ArrowSpeed = ArrowSpeed * EnvironmentAttackModifier;
         StartCoroutine(ReloadArrow());
     }
+
     public void Charge()
     {
         MaxSpeed = InitialMaxSpeed * 0.8f;

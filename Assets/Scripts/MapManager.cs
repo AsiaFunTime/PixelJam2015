@@ -19,6 +19,10 @@ public class MapManager : MonoBehaviour {
     public GameObject archer;
     public GameObject peasant;
 
+    public GameObject treesSingle;
+
+    public GameObject hills;
+
     // Use this for initialization
 	void Start () {
         // spawn units
@@ -26,8 +30,17 @@ public class MapManager : MonoBehaviour {
         SpawnUnits(footman, (int)(footmanSpawnChance * maxUnits));
         SpawnUnits(archer, (int)(archerSpawnChance * maxUnits));
         SpawnUnits(peasant,(int) (peasantSpawnChance * maxUnits));
-	}
 
+        SpawnUnits(treesSingle, maxTrees);
+	}
+    
+    void SpawnNoRandomRotation(GameObject unit, int count)
+    {        
+        for (int i = 0; i < count; i++)
+        {
+            GameObject.Instantiate(unit, GetRandomPoint(), hills.transform.rotation);
+        }
+    }
            
     void SpawnUnits(GameObject unit, int count)
     {        
