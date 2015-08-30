@@ -15,6 +15,9 @@ abstract public class UnitBehavior : MonoBehaviour {
 	public GameObject _unitPrefab;
     public GameObject _king;
 
+    public float EnvironmentSpeedModifier = 1f;
+    public float EnvironmentAttackModifier = 1f;
+
     public AudioManagerScript audio;
     // The player who killed this unit
     public int Killer = 0;
@@ -67,7 +70,7 @@ abstract public class UnitBehavior : MonoBehaviour {
     }
     public float MaxSpeed { 
         get {
-            return _maxSpeed;
+            return _maxSpeed * EnvironmentSpeedModifier;
         }
         set{
             _maxSpeed = value;
@@ -241,6 +244,35 @@ abstract public class UnitBehavior : MonoBehaviour {
             audio.Play("attack");
             UnitBehavior ub = other.GetComponent<UnitBehavior>();
             ub.TakeDamage(Damage, Ruler);
+        }
+
+        if (other.tag == "Environment")
+        {
+            Environment env = other.GetComponent<Environment>();
+            EnvironmentSpeedModifier = env.SpeedModifier;
+            EnvironmentAttackModifier = env.AttackModifier;
+
+            if(this is Knight){
+                if(other.name.Contains("Trees")){
+                    Damage = 0;
+                }
+            }
+        }
+    }
+
+    public void OnTriggerExit(Collider other){        
+        if (other.tag == "Environment")
+        {
+            Environment env = other.GetComponent<Environment>();
+            EnvironmentSpeedModifier = 1f;
+            EnvironmentAttackModifier = 1f;
+
+            
+            if(this is Knight){
+                if(other.name.Contains("Trees")){
+                    Damage = 1;
+                }
+            }
         }
     }
 
