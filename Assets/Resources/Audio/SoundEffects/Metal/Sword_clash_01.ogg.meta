@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Audio/SoundEffects/Metal/Sword_clash_01.ogg.meta
 guid: b2e9a68b9bdb8424f85bcff7c1e2c960
 timeCreated: 1440893955
+=======
+guid: 907b923bb5d769346a7bc6bfea9731bf
+timeCreated: 1440892671
+>>>>>>> origin/master:Assets/Resources/Audio/SoundEffects/Metal/Sword_clash_01.ogg.meta
 licenseType: Free
 AudioImporter:
   serializedVersion: 6
