@@ -24,6 +24,7 @@ public class AudioManagerScript : MonoBehaviour {
     AudioClip horseGallop = new AudioClip();
     AudioSource horseGallopSource =new  AudioSource();
     AudioClip bugleClip = new AudioClip();
+    AudioSource bugleSource =new  AudioSource();
 
 	public GameObject gameManager;
 
@@ -59,7 +60,8 @@ public class AudioManagerScript : MonoBehaviour {
 		horseGallop = Resources.Load ("Audio/SoundEffects/Horse/cavalry_charge") as AudioClip;
 		horseGallopSource = gameObject.AddComponent<AudioSource>();
 		horseGallopSource.clip = horseGallop;
-		horseGallopSource.volume = 0.5f;
+		horseGallopSource.volume = 0.1f;
+        horseGallopSource.loop = true;
 		horseGallopSource.Play ();
 
 		grunts[0] = Resources.Load ("Audio/SoundEffects/Metal/man_grunt_pain_01") as AudioClip;
@@ -151,6 +153,8 @@ public class AudioManagerScript : MonoBehaviour {
 		recruitKnights[5] = Resources.Load ("Audio/SoundEffects/WC2/Knight/Tuyessr1") as AudioClip;
         
         bugleClip = Resources.Load ("Audio/SoundEffects/Menu/bugle") as AudioClip;
+        bugleSource = gameObject.AddComponent<AudioSource>();
+        bugleSource.clip = bugleClip;
 	}
 	
 	// Update is called once per frame
@@ -203,7 +207,7 @@ public class AudioManagerScript : MonoBehaviour {
             audioSource.clip = arrowCollide [i];
         } else if (clipName == "horseGallop")
         {
-            audioSource.volume = 0.5f;
+            audioSource.volume = 0.2f;
             audioSource.clip = horseGallop;
         } else if (clipName == "charge")
         {
@@ -231,8 +235,8 @@ public class AudioManagerScript : MonoBehaviour {
             audioSource.volume = 0.5f;
         } else if (clipName == "bugle")
         {
-            audioSource.clip = bugleClip;
-            audioSource.volume = 0.4f;
+            bugleSource.volume = 0.1f;
+            bugleSource.PlayOneShot(bugleClip);
         }
         if (audioSource.clip != null)
         {
